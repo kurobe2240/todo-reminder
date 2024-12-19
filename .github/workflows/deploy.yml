@@ -1,0 +1,49 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-22.04
+    concurrency: ci-${{ github.ref }}
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          cache: 'npm'
+          cache-dependency-path: todo-reminder/package-lock.json
+
+      - name: List directory structure
+        run: |
+          pwd
+          ls -la
+          cd todo-reminder
+          ls -la
+
+      - name: Install Dependencies
+        working-directory: todo-reminder
+        run: npm install
+
+      - name: Build
+        working-directory: todo-reminder
+        env:
+          CI: false
+        run: npm run build
+
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: todo-reminder/build
+          branch: gh-pages
+          clean: true
