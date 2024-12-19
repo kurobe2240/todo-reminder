@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import { Todo, TodoFormData, SortOption, SortDirection } from './types/todo';
+import { getFirestore, doc, setDoc } from 'firebase/firestore';
 
 interface Notification {
   id: string;
@@ -12,6 +13,7 @@ const STORAGE_KEY = 'todo-reminder-tasks';
 const NOTIFICATION_SETTING_KEY = 'notification-enabled';
 const CATEGORIES = ['仕事', '個人', '買い物', 'その他'];
 const WORK_TIMES = Array.from({ length: 24 }, (_, i) => (i + 1) * 10); // 10分から240分（4時間）まで10分刻み
+const DAYS_OF_WEEK = ['日', '月', '火', '水', '木', '金', '土'];
 
 const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>(() => {
@@ -48,6 +50,10 @@ const App: React.FC = () => {
     return saved ? JSON.parse(saved) : false;
   });
   const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [selectedDays, setSelectedDays] = useState<string[]>([]);
+  const [sameTimeNotification, setSameTimeNotification] = useState<boolean>(false);
+
+  const firestore = getFirestore();
 
   const showNotification = async (title: string, message: string) => {
     console.log('通知を表示しようとしています:', { title, message });
@@ -55,7 +61,7 @@ const App: React.FC = () => {
     try {
       const id = `notification-${Date.now()}`;
       
-      // 画面上の通知を表示
+      // ��面上の通知を表示
       setNotifications(prev => [...prev, { id, title, message }]);
       setTimeout(() => {
         setNotifications(prev => prev.filter(n => n.id !== id));
@@ -109,7 +115,7 @@ const App: React.FC = () => {
         setNotificationPermission(true);
         
         // テスト通知を表示
-        showNotification('通知テスト', '通知が正常に設定されました！');
+        showNotificationWithSound('通知テスト', '通知が正常に設定されました！');
       } else {
         setNotificationEnabled(false);
         setNotificationPermission(false);
@@ -347,6 +353,44 @@ const App: React.FC = () => {
     showNotification('テスト通知', 'これはテスト通知です');
   };
 
+  // 通知音を再生する関数
+  const playNotificationSound = () => {
+    const audio = new Audio('/sounds/notification.mp3');
+    audio.play();
+  };
+
+  // 通知を表示する関数
+  const showNotificationWithSound = (title: string, message: string) => {
+    playNotificationSound();
+    showNotification(title, message);
+  };
+
+  // 例: タスク追加時に通知音を再生
+  const addTask = () => {
+    // タスク追加のロジック
+    showNotificationWithSound('タスク追加', '新しいタスクが追加されました！');
+  };
+
+  const handleDaySelection = (day: string) => {
+    setSelectedDays(prev =>
+      prev.includes(day) ? prev.filter(d => d !== day) : [...prev, day]
+    );
+  };
+
+  const saveSelectedDays = async () => {
+    try {
+      const userDoc = doc(firestore, 'users', 'user-id'); // ユーザーIDは適切に設定してください
+      await setDoc(userDoc, { selectedDays });
+      alert('曜日選択が保存されました');
+    } catch (error) {
+      console.error('曜日選択の保存に失敗しました', error);
+    }
+  };
+
+  const toggleSameTimeNotification = () => {
+    setSameTimeNotification(prev => !prev);
+  };
+
   return (
     <div className="App">
       <header className="App-header">
@@ -474,7 +518,7 @@ const App: React.FC = () => {
             </button>
             {editingTodo && (
               <button type="button" onClick={cancelEditing} className="todo-cancel">
-                キャンセル
+                キャン���ル
               </button>
             )}
           </div>
@@ -506,7 +550,7 @@ const App: React.FC = () => {
                         onClick={() => startWork(todo.id)}
                         className="todo-start"
                       >
-                        開始
+                        開���
                       </button>
                     )}
                     <button
@@ -554,6 +598,32 @@ const App: React.FC = () => {
           <div className="message">{notification.message}</div>
         </div>
       ))}
+
+      <div style={{ marginTop: '20px' }}>
+        <h2>通知を受け取りたい曜日を選択してください</h2>
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '10px' }}>
+          {DAYS_OF_WEEK.map(day => (
+            <button
+              key={day}
+              onClick={() => handleDaySelection(day)}
+              style={{
+                backgroundColor: selectedDays.includes(day) ? 'lightblue' : 'white',
+                margin: '0 5px',
+                padding: '10px',
+                borderRadius: '5px',
+                border: '1px solid #ccc',
+              }}
+            >
+              {day}
+            </button>
+          ))}
+        </div>
+        <button onClick={toggleSameTimeNotification} style={{ padding: '10px', borderRadius: '5px', border: '1px solid #ccc' }}>
+          {sameTimeNotification ? '同じ時間に通知をOFF' : '同じ時間に通知をON'}
+        </button>
+      </div>
+
+      <button onClick={saveSelectedDays}>曜日選択を保存</button>
     </div>
   );
 };
