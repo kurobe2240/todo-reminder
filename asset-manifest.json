@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/hitotonaru-toki/static/css/main.ac1091fe.css",
-    "main.js": "/hitotonaru-toki/static/js/main.a19487c3.js",
-    "index.html": "/hitotonaru-toki/index.html",
-    "main.ac1091fe.css.map": "/hitotonaru-toki/static/css/main.ac1091fe.css.map",
-    "main.a19487c3.js.map": "/hitotonaru-toki/static/js/main.a19487c3.js.map"
+    "main.css": "/todo-reminder/static/css/main.ac1091fe.css",
+    "main.js": "/todo-reminder/static/js/main.772aca2d.js",
+    "index.html": "/todo-reminder/index.html",
+    "main.ac1091fe.css.map": "/todo-reminder/static/css/main.ac1091fe.css.map",
+    "main.772aca2d.js.map": "/todo-reminder/static/js/main.772aca2d.js.map"
   },
   "entrypoints": [
     "static/css/main.ac1091fe.css",
-    "static/js/main.a19487c3.js"
+    "static/js/main.772aca2d.js"
   ]
 }
