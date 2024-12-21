@@ -1,0 +1,45 @@
+{
+  "name": "todo-app-mini",
+  "version": "1.0.0",
+  "description": "Simple TODO application with React Native",
+  "main": "index.js",
+  "scripts": {
+    "start": "react-native start",
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
+    "test": "jest",
+    "lint": "eslint ."
+  },
+  "keywords": [
+    "react-native",
+    "todo",
+    "typescript"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@react-native-async-storage/async-storage": "^1.21.0",
+    "@react-native-community/datetimepicker": "^8.2.0",
+    "@react-native-community/push-notification-ios": "^1.11.0",
+    "@react-native-community/slider": "^4.5.5",
+    "@react-native/virtualized-lists": "^0.76.5",
+    "date-fns": "^2.30.0",
+    "react": "18.2.0",
+    "react-native": "0.76.5",
+    "zustand": "^4.4.7"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.23.7",
+    "@babel/preset-env": "^7.23.7",
+    "@babel/preset-typescript": "^7.23.7",
+    "@babel/runtime": "^7.23.7",
+    "@react-native-community/cli": "^12.3.0",
+    "@tsconfig/react-native": "^3.0.2",
+    "@types/jest": "^29.5.11",
+    "@types/react": "^18.2.0",
+    "@types/react-native": "^0.72.0",
+    "jest": "^29.7.0",
+    "metro-react-native-babel-preset": "^0.77.0",
+    "typescript": "^5.3.3"
+  }
+}
