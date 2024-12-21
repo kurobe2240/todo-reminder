@@ -2,7 +2,7 @@
   "name": "hitotonaru-toki",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://kurobe2240.github.io/hitotonaru-toki/",
+  "homepage": "https://kurobe2240.github.io/todo-reminder/",
   "dependencies": {
     "@types/node": "^16.18.0",
     "@types/react": "^18.0.0",
